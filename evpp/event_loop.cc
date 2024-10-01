@@ -300,7 +300,7 @@ void EventLoop::QueueInLoop(Functor&& cb) {
 }
 
 void EventLoop::DoPendingFunctors() {
-    DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
+   // DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
 
 #ifdef H_HAVE_BOOST
     notified_.store(false);
@@ -323,14 +323,14 @@ void EventLoop::DoPendingFunctors() {
         std::lock_guard<std::mutex> lock(mutex_);
         notified_.store(false);
         pending_functors_->swap(functors);
-        DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
+       // DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
     }
-    DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
+   // DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
     for (size_t i = 0; i < functors.size(); ++i) {
         functors[i]();
         --pending_functor_count_;
     }
-    DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
+    //DLOG_TRACE << "pending_functor_count_=" << pending_functor_count_ << " PendingQueueSize=" << GetPendingQueueSize() << " notified_=" << notified_.load();
 #endif
 }
 
