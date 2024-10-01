@@ -178,8 +178,13 @@ int main() {
     while (!g_loop->IsRunning()) {
         usleep(1000);
     }
-    MemcacheClientSerial mcp("10.102.16.25:20099", 200);
-    assert(mcp.Start(g_loop));
+    MemcacheClientSerial mcp("127.0.0.1:11211", 200);
+    auto result = mcp.Start(g_loop);
+
+    if(!result)
+         LOG_ERROR << "MemcacheClientSerial.Start failed.";
+
+    assert(result);
     usleep(2 * 1000 * 1000);
     std::string key("test");
     std::string value("test1");

@@ -105,7 +105,7 @@ void MemcacheClientBase::OnClientConnection(const evpp::TCPConnPtr& conn, Memcac
         LOG_INFO << "OnClientConnection connect ok";
         CommandPtr command;
 
-        while (command = memc_client->PopWaitingCommand()) {
+        while ((command = memc_client->PopWaitingCommand())) {
             memc_client->PushRunningCommand(command);
             command->Launch(memc_client);
         }
@@ -118,7 +118,7 @@ void MemcacheClientBase::OnClientConnection(const evpp::TCPConnPtr& conn, Memcac
 
         CommandPtr command;
 
-        while (command = memc_client->PopRunningCommand()) {
+        while ((command = memc_client->PopRunningCommand())) {
             if (command->ShouldRetry()) {
                 command->set_id(0);
                 command->set_server_id(command->server_id());
@@ -128,7 +128,7 @@ void MemcacheClientBase::OnClientConnection(const evpp::TCPConnPtr& conn, Memcac
             }
         }
 
-        while (command = memc_client->PopWaitingCommand()) {
+        while ((command = memc_client->PopWaitingCommand())) {
             if (command->ShouldRetry()) {
                 command->set_id(0);
                 command->set_server_id(command->server_id());

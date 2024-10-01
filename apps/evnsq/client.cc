@@ -204,7 +204,7 @@ void Client::OnConnection(const NSQConnPtr& conn) {
         }
 
         // Waiting for the status of NSQConn to be stable, and then execute the function f in next loop
-        auto f = [this, conn]() {
+        auto f = [conn]() {
             assert(conn->IsDisconnected());
             if (!conn->IsDisconnected()) {
                 LOG_ERROR << "NSQConn status is not kDisconnected : " << int(conn->status());

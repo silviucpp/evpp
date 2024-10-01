@@ -144,7 +144,7 @@ bool Server::Start() {
         auto& lthread = lt.thread;
         auto http_close_fn = [hservice]() {
             hservice->Stop();
-            DLOG_TRACE << "http service at 0.0.0.0:" << hservice->port() << " has stopped.";
+            LOG_INFO << "http service at 0.0.0.0:" << hservice->port() << " has stopped.";
             return EventLoopThread::kOK;
         };
         rc = lthread->Start(true,

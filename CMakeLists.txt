@@ -46,6 +46,17 @@ else (UNIX)
     # link_directories(${VcpkgRoot}/lib ${VcpkgRoot}/lib/manual-link)
 endif (UNIX)
 
+if(APPLE)
+    include_directories(/usr/local/include) # For Intel-based Macs
+    link_directories(/usr/local/lib)
+
+    # For Apple Silicon (M1/M2), Homebrew defaults to /opt/homebrew
+    if(EXISTS "/opt/homebrew/include")
+        include_directories(/opt/homebrew/include)
+        link_directories(/opt/homebrew/lib)
+    endif()
+endif()
+
 string (REPLACE ";" " " CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS};${CXX_FLAGS}")
 
 if (UNIX)
@@ -93,10 +104,10 @@ if (NOT EVPP_VCPKG_BUILD)
     message (STATUS "THRIFT_LIBRARY " ${THRIFT_LIBRARY})
 
     add_subdirectory (apps)
-    add_subdirectory (labs)
-    add_subdirectory (test)
-    add_subdirectory (examples)
-    add_subdirectory (benchmark)
+    #add_subdirectory (labs)
+    #add_subdirectory (test)
+    #add_subdirectory (examples)
+    #add_subdirectory (benchmark)
 endif ()
 
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")

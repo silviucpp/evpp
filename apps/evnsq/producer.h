@@ -59,7 +59,7 @@ private:
 
     // TODO add HWM relative logic code
     enum { kDefaultHighWaterMark = 1024 };
-    bool hwm_triggered_; // The flag of high water mark
+    //bool hwm_triggered_; // The flag of high water mark
     HighWaterMarkCallback high_water_mark_fn_;
     size_t high_water_mark_; // The high water mark for message count. default value is kDefaultHighWaterMark
 };

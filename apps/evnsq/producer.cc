@@ -12,7 +12,7 @@ Producer::Producer(evpp::EventLoop* l, const Option& ops)
     , published_count_(0)
     , published_ok_count_(0)
     , published_failed_count_(0)
-    , hwm_triggered_(false)
+    //, hwm_triggered_(false)
     , high_water_mark_(kDefaultHighWaterMark) {
     // TODO Remember to remove these callbacks from EventLoop when stopping this Producer
     ready_to_publish_fn_ = std::bind(&Producer::OnReady, this, std::placeholders::_1);

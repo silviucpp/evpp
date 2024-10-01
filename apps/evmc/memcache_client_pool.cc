@@ -144,7 +144,7 @@ namespace evmc {
             auto& item = serverid_keys[server_id];
             item.keys.emplace_back(key);
             item.vbuckets.emplace_back(vbucket);
-            result.emplace(std::move(key), std::move(GetResult()));
+            result.emplace(std::move(key), GetResult());
         }
         handler->set_serverid_keys(serverid_keys);
 
