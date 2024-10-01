@@ -273,7 +273,7 @@ int main() {
     evpp::http::Server ph(i);
     ph.RegisterDefaultHandler(&DefaultRequestHandler);
     ph.RegisterHandler("/909", &RequestHandler909);
-    ph.Init(g_listening_port);
+    bool r = ph.Init(g_listening_port);
     auto pid = fork();
     if (pid != 0) {
         // In parent process 
@@ -288,7 +288,12 @@ int main() {
     LOG_INFO << "In child process. Doing AfterFork";
     ph.AfterFork();
     ph.Start();
+
+    if(!r)
+        LOG_ERROR << "ph.Init failed";
+
     H_TEST_ASSERT(r);
+
     Test909();
     ph.Stop();
     usleep(1000 * 1000); // sleep a while to release the listening address and port

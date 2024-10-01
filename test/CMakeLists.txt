@@ -7,6 +7,11 @@ file(GLOB evpp_https_unittest_SRCS https_client_test.cc
 							 ${PROJECT_SOURCE_DIR}/3rdparty/gtest/src/gtest_main.cc)
 include_directories(${PROJECT_SOURCE_DIR}/3rdparty ${PROJECT_SOURCE_DIR}/3rdparty/gtest)
 
+# Suppress specific warnings for GCC or Clang
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-Wno-missing-field-initializers -Wno-sign-compare)
+endif()
+
 if (MSVC)
 link_directories(${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/)
 endif (MSVC)
