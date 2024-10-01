@@ -8,8 +8,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-int64_t total_bytes_read = 0;
-int64_t total_messages_read = 0;
+size_t total_bytes_read = 0;
+size_t total_messages_read = 0;
 
 static void set_tcp_no_delay(evutil_socket_t fd)
 {
@@ -118,8 +118,8 @@ int main(int argc, char **argv)
   event_base_free(base);
   free(message);
 
-  printf("%lld total bytes read\n", total_bytes_read);
-  printf("%lld total messages read\n", total_messages_read);
+  printf("%ld total bytes read\n", total_bytes_read);
+  printf("%ld total messages read\n", total_messages_read);
   printf("%.3f average messages size\n",
       (double)total_bytes_read / total_messages_read);
   printf("%.3f MiB/s throughtput\n",

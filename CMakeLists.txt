@@ -23,6 +23,7 @@ if (UNIX)
          -Wsign-compare
          -Winvalid-pch
          -fms-extensions
+         -Wno-implicit-fallthrough
          -Wfloat-equal
          -std=c++17
     )
