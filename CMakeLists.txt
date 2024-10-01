@@ -11,6 +11,7 @@ if (UNIX)
          -g
          -fPIC
          -Wall
+         -Wextra
          -D__STDC_FORMAT_MACROS
          -Wno-unused-parameter
          -Wno-unused-function
@@ -18,23 +19,25 @@ if (UNIX)
          -Wunused-value
          -Wshadow
          -Wcast-qual
-         -Wcast-align
          -Wwrite-strings
          -Wsign-compare
          -Winvalid-pch
          -fms-extensions
          -Wfloat-equal
-         -Wextra
-         -std=c++11
+         -std=c++17
     )
-    include_directories (${PROJECT_SOURCE_DIR}
-                         ${PROJECT_SOURCE_DIR}/3rdparty)
+    include_directories (
+        ${PROJECT_SOURCE_DIR} 
+        ${PROJECT_SOURCE_DIR}/3rdparty
+    )
 else (UNIX)
-set (CXX_FLAGS -DWIN32 -D_WIN32 -EHsc)
+    set (CXX_FLAGS -DWIN32 -D_WIN32 -EHsc)
     set(VcpkgRoot ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
-    include_directories(${VcpkgRoot}/include
-                        ${PROJECT_SOURCE_DIR}
-                        ${PROJECT_SOURCE_DIR}/3rdparty/wininclude)
+    include_directories(
+        ${VcpkgRoot}/include
+        ${PROJECT_SOURCE_DIR}
+        ${PROJECT_SOURCE_DIR}/3rdparty/wininclude
+    )
 
     # On windows, Debug mode
     link_directories(${VcpkgRoot}/debug/lib ${VcpkgRoot}/debug/lib/manual-link)
@@ -43,7 +46,7 @@ set (CXX_FLAGS -DWIN32 -D_WIN32 -EHsc)
     # link_directories(${VcpkgRoot}/lib ${VcpkgRoot}/lib/manual-link)
 endif (UNIX)
 
-string (REPLACE ";" " " CMAKE_CXX_FLAGS "${CXX_FLAGS}")
+string (REPLACE ";" " " CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS};${CXX_FLAGS}")
 
 if (UNIX)
     SET(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g -ggdb -D_DEBUG -DGOOGLE_STRIP_LOG=0")
@@ -62,7 +65,6 @@ if (HTTPS)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_SERVER_SUPPORTS_SSL")
 endif (HTTPS)
 
-
 if (CMAKE_BENCHMARK_TESTING)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH_BENCHMARK_TESTING=1")
 endif (CMAKE_BENCHMARK_TESTING)
@@ -73,24 +75,25 @@ set (LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 #set (MACOSX_RPATH ${LIBRARY_OUTPUT_PATH})
 set (CMAKE_MACOSX_RPATH 0)
 
-find_program(THRIFT_COMPILER thrift)
-find_path(THRIFT_INCLUDE_DIR thrift)
-find_library(THRIFT_LIBRARY NAMES thrift)
-
 message (STATUS "This is BINARY dir " ${PROJECT_BINARY_DIR})
 message (STATUS "This is SOURCE dir " ${PROJECT_SOURCE_DIR})
 message (STATUS "CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS})
 message (STATUS "EXECUTABLE_OUTPUT_PATH " ${EXECUTABLE_OUTPUT_PATH})
 message (STATUS "LIBRARY_OUTPUT_PATH " ${LIBRARY_OUTPUT_PATH})
-message (STATUS "THRIFT_COMPILER " ${THRIFT_COMPILER})
-message (STATUS "THRIFT_INCLUDE_DIR " ${THRIFT_INCLUDE_DIR})
-message (STATUS "THRIFT_LIBRARY " ${THRIFT_LIBRARY})
 
 add_subdirectory (evpp)
-add_subdirectory (apps)
-add_subdirectory (labs)
 
 if (NOT EVPP_VCPKG_BUILD)
+    find_program(THRIFT_COMPILER thrift)
+    find_path(THRIFT_INCLUDE_DIR thrift)
+    find_library(THRIFT_LIBRARY NAMES thrift)
+
+    message (STATUS "THRIFT_COMPILER " ${THRIFT_COMPILER})
+    message (STATUS "THRIFT_INCLUDE_DIR " ${THRIFT_INCLUDE_DIR})
+    message (STATUS "THRIFT_LIBRARY " ${THRIFT_LIBRARY})
+
+    add_subdirectory (apps)
+    add_subdirectory (labs)
     add_subdirectory (test)
     add_subdirectory (examples)
     add_subdirectory (benchmark)
@@ -99,6 +102,5 @@ endif ()
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include (utils)
 include (packages)
-
 include (CPack)
 include (CTest)

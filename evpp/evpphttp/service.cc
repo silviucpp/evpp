@@ -78,7 +78,7 @@ int Service::RequestHandler(const evpp::TCPConnPtr& conn, evpp::Buffer* buf, Htt
         return -1;
     }
     if (hr.completed()) {
-        auto path = std::move(hr.url_path());
+        auto path = hr.url_path();
         auto cb = callbacks_.find(path);
         HttpResponse resp(hr);
         auto f = [conn, resp](const int response_code, const std::map<std::string, std::string>& response_field_value, const std::string& response_data) mutable {
