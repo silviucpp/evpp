@@ -43,19 +43,19 @@ void TestTCPServer1() {
     std::unique_ptr<evpp::EventLoopThread> tcp_server_thread(new evpp::EventLoopThread);
     tcp_server_thread->Start(true);
     auto loop = tcp_server_thread->loop();
-    std::unique_ptr<evpp::TCPServer> tsrv(new evpp::TCPServer(loop, GetListenAddr(), "tcp_server", 2));
-    tsrv->SetMessageCallback([](const evpp::TCPConnPtr& conn,
+    std::unique_ptr<evpp::TCPServer> tsrv_(new evpp::TCPServer(loop, GetListenAddr(), "tcp_server", 2));
+    tsrv_->SetMessageCallback([](const evpp::TCPConnPtr& conn,
                                 evpp::Buffer* msg) {
         message_recved = true;
     });
-    bool rc = tsrv->Init();
+    bool rc = tsrv_->Init();
     assert(rc);
-    rc = tsrv->Start();
+    rc = tsrv_->Start();
     assert(rc);
     (void)rc;
-    loop->RunAfter(evpp::Duration(1.4), [&tsrv]() { tsrv->Stop(); });
+    loop->RunAfter(evpp::Duration(1.4), [&tsrv_]() { tsrv_->Stop(); });
     std::shared_ptr<evpp::TCPClient> client = StartTCPClient(tcp_client_thread->loop());
-    while (!tsrv->IsStopped()) {
+    while (!tsrv_->IsStopped()) {
         usleep(1);
     }
     tcp_server_thread->Stop(true);
@@ -65,38 +65,38 @@ void TestTCPServer1() {
     assert(message_recved);
     tcp_client_thread.reset();
     tcp_server_thread.reset();
-    tsrv.reset();
+    tsrv_.reset();
     assert(evpp::GetActiveEventCount() == 0);
 }
 
 void TestTCPServerSilenceShutdown1() {
     std::unique_ptr<evpp::EventLoop> loop(new evpp::EventLoop);
-    std::unique_ptr<evpp::TCPServer> tsrv(new evpp::TCPServer(loop.get(), GetListenAddr(), "tcp_server", 2));
-    bool rc = tsrv->Init();
+    std::unique_ptr<evpp::TCPServer> tsrv_(new evpp::TCPServer(loop.get(), GetListenAddr(), "tcp_server", 2));
+    bool rc = tsrv_->Init();
     assert(rc);
-    rc = tsrv->Start();
+    rc = tsrv_->Start();
     assert(rc);
     (void)rc;
-    loop->RunAfter(evpp::Duration(1.2), [&tsrv]() { tsrv->Stop(); });
+    loop->RunAfter(evpp::Duration(1.2), [&tsrv_]() { tsrv_->Stop(); });
     loop->RunAfter(evpp::Duration(1.3), [&loop]() { loop->Stop(); });
     loop->Run();
     loop.reset();
-    tsrv.reset();
+    tsrv_.reset();
     assert(evpp::GetActiveEventCount() == 0);
 }
 
 void TestTCPServerSilenceShutdown2() {
     std::unique_ptr<evpp::EventLoop> loop(new evpp::EventLoop);
-    std::unique_ptr<evpp::TCPServer> tsrv(new evpp::TCPServer(loop.get(), GetListenAddr(), "tcp_server", 2));
-    bool rc = tsrv->Init();
+    std::unique_ptr<evpp::TCPServer> tsrv_(new evpp::TCPServer(loop.get(), GetListenAddr(), "tcp_server", 2));
+    bool rc = tsrv_->Init();
     assert(rc);
-    rc = tsrv->Start();
+    rc = tsrv_->Start();
     assert(rc);
     (void)rc;
-    loop->RunAfter(evpp::Duration(1.0), [&tsrv, &loop]() { tsrv->Stop(); loop->Stop(); });
+    loop->RunAfter(evpp::Duration(1.0), [&tsrv_, &loop]() { tsrv_->Stop(); loop->Stop(); });
     loop->Run();
     loop.reset();
-    tsrv.reset();
+    tsrv_.reset();
     assert(evpp::GetActiveEventCount() == 0);
 }
 

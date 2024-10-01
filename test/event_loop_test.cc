@@ -141,9 +141,9 @@ TEST_UNIT(TestEventLoop5) {
 
 // Test EventLoop's constructor and destructor
 TEST_UNIT(TestEventLoop6) {
-    evpp::EventLoop* loop = new evpp::EventLoop;
-    LOG_INFO << "loop=" << loop;
-    delete loop;
+    evpp::EventLoop* loop_ = new evpp::EventLoop;
+    LOG_INFO << "loop=" << loop_;
+    delete loop_;
 }
 
 

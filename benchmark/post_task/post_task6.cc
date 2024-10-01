@@ -10,8 +10,7 @@ uint64_t clock_us() {
 class PostTask {
 public:
     PostTask(int thread_count, uint64_t post_count)
-        : thread_count_(thread_count)
-            , total_post_count_(post_count)
+        :  total_post_count_(post_count)
             , pool_(NULL, thread_count) {
         }
 
@@ -49,7 +48,7 @@ private:
         for (uint32_t i = 0; i < pool_.thread_num(); i++) {
             pool_.GetNextLoopWithHash(i)->RunInLoop(p);
         }
-        
+
     }
 
     void Stop() {
@@ -58,7 +57,6 @@ private:
         loop_.Stop();
     }
 private:
-    const int thread_count_;
     const uint64_t total_post_count_;
     uint64_t count_ = 0;
     evpp::EventLoopThread loop_;

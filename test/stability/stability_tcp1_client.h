@@ -9,7 +9,7 @@
 #include <evpp/tcp_client.h>
 
 namespace {
-    static std::shared_ptr<evpp::TCPServer> tsrv;
+    static std::shared_ptr<evpp::TCPServer> t_server;
     static std::atomic<int> connected_count(0);
     static std::atomic<int> message_recved_count(0);
 
@@ -34,7 +34,7 @@ namespace {
 }
 
 void TestTCPClientReconnect() {
-    tsrv.reset();
+    t_server.reset();
     connected_count = (0);
     message_recved_count = (0);
     std::unique_ptr<evpp::EventLoopThread> tcp_client_thread(new evpp::EventLoopThread);
@@ -48,22 +48,22 @@ void TestTCPClientReconnect() {
     int test_count = 3;
     for (int i = 0; i < test_count; i++) {
         LOG_INFO << "NNNNNNNNNNNNNNNN TestTCPClientReconnect i=" << i;
-        tsrv.reset(new evpp::TCPServer(tcp_server_thread->loop(), GetListenAddr(), "tcp_server", i));
-        tsrv->SetMessageCallback([](const evpp::TCPConnPtr& conn,
+        t_server.reset(new evpp::TCPServer(tcp_server_thread->loop(), GetListenAddr(), "tcp_server", i));
+        t_server->SetMessageCallback([](const evpp::TCPConnPtr& conn,
                                     evpp::Buffer* msg) {
             message_recved_count++;
         });
-        bool rc = tsrv->Init();
+        bool rc = t_server->Init();
         assert(rc);
-        rc = tsrv->Start();
+        rc = t_server->Start();
         assert(rc);
         (void)rc;
         usleep(evpp::Duration(2.0).Microseconds()); // sleep 2 seconds to let the TCP client connected.
-        tsrv->Stop();
-        while (!tsrv->IsStopped()) {
+        t_server->Stop();
+        while (!t_server->IsStopped()) {
             usleep(1);
         }
-        tsrv.reset();
+        t_server.reset();
     }
     LOG_INFO << "XXXXXXXXXX connected_count=" << connected_count << " message_recved_count=" << message_recved_count;
     tcp_client_thread->loop()->RunInLoop([client]() {client->Disconnect(); });
@@ -78,7 +78,7 @@ void TestTCPClientReconnect() {
     assert(message_recved_count == test_count);
     tcp_client_thread.reset();
     tcp_server_thread.reset();
-    tsrv.reset();
+    t_server.reset();
 
     assert(evpp::GetActiveEventCount() == 0);
 }

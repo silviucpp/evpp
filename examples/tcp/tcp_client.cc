@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 
     evpp::EventLoop loop;
     evpp::TCPClient client(&loop, addr, "TCPPingPongClient");
-    client.SetMessageCallback([&loop, &client](const evpp::TCPConnPtr& conn,
+    client.SetMessageCallback([&client](const evpp::TCPConnPtr& conn,
                                evpp::Buffer* msg) {
         LOG_TRACE << "Receive a message [" << msg->ToString() << "]";
         client.Disconnect();

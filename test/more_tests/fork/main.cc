@@ -273,7 +273,7 @@ int main() {
     evpp::http::Server ph(i);
     ph.RegisterDefaultHandler(&DefaultRequestHandler);
     ph.RegisterHandler("/909", &RequestHandler909);
-    bool r = ph.Init(g_listening_port);
+    ph.Init(g_listening_port);
     auto pid = fork();
     if (pid != 0) {
         // In parent process 

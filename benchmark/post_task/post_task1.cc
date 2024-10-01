@@ -10,8 +10,7 @@ uint64_t clock_us() {
 class PostTask {
 public:
     PostTask(int thread_count, uint64_t post_count)
-        : thread_count_(thread_count)
-            , post_count_(post_count)
+        :  post_count_(post_count)
             , pool_(&loop_, thread_count) {
         }
 
@@ -53,7 +52,6 @@ private:
         });
     }
 private:
-    const int thread_count_;
     const uint64_t post_count_;
     evpp::EventLoop loop_;
     evpp::EventLoopThreadPool pool_;

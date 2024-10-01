@@ -6,7 +6,7 @@
 
 class Printer {
 public:
-    Printer(evpp::EventLoop* l) : loop_(l), count_(0) {}
+    Printer() : count_(0) {}
     void Print1() {
         std::cout << "Print1 : count=" << count_ << std::endl;
         ++count_;
@@ -17,13 +17,12 @@ public:
         ++count_;
     }
 private:
-    evpp::EventLoop* loop_;
     int count_;
 };
 
 int main() {
     evpp::EventLoop loop;
-    Printer printer(&loop);
+    Printer printer;
     loop.RunEvery(evpp::Duration(1.0), std::bind(&Printer::Print1, &printer));
     loop.RunEvery(evpp::Duration(2.0), std::bind(&Printer::Print2, &printer));
     auto f = [&loop]() {

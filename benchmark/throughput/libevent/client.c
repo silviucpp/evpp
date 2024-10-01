@@ -22,7 +22,7 @@ static void timeoutcb(evutil_socket_t fd, short what, void *arg)
 {
   struct event_base *base = arg;
   printf("timeout\n");
-  
+
   event_base_loopexit(base, NULL);
 }
 
@@ -118,8 +118,8 @@ int main(int argc, char **argv)
   event_base_free(base);
   free(message);
 
-  printf("%zd total bytes read\n", total_bytes_read);
-  printf("%zd total messages read\n", total_messages_read);
+  printf("%lld total bytes read\n", total_bytes_read);
+  printf("%lld total messages read\n", total_messages_read);
   printf("%.3f average messages size\n",
       (double)total_bytes_read / total_messages_read);
   printf("%.3f MiB/s throughtput\n",
