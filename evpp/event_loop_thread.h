@@ -18,7 +18,7 @@ public:
     enum { kOK = 0 };
 
     // Return 0 means OK, anything else means failed.
-    typedef std::function<int()> Functor;
+    typedef evpp::function<int()> Functor;
 
     EventLoopThread();
     ~EventLoopThread();

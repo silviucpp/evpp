@@ -8,7 +8,7 @@
 namespace evpp {
 class EVPP_EXPORT EventLoopThreadPool : public ServerStatus {
 public:
-    typedef std::function<void()> DoneCallback;
+    typedef evpp::function<void()> DoneCallback;
 
     EventLoopThreadPool(EventLoop* base_loop, uint32_t thread_num);
     ~EventLoopThreadPool();

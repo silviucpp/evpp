@@ -21,8 +21,8 @@ public:
         kReadable = 0x02,
         kWritable = 0x04,
     };
-    typedef std::function<void()> EventCallback;
-    typedef std::function<void()> ReadEventCallback;
+    typedef evpp::function<void()> EventCallback;
+    typedef evpp::function<void()> ReadEventCallback;
 
 public:
     FdChannel(EventLoop* loop, evpp_socket_t fd,

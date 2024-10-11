@@ -4,7 +4,7 @@
 #include <event2/event_struct.h>
 #include <event2/event_compat.h>
 
-#include <functional>
+#include "evpp/functional.h"
 
 struct event;
 struct event_base;
@@ -13,7 +13,7 @@ namespace recipes {
 
     class EventWatcher {
     public:
-        typedef std::function<void()> Handler;
+        typedef evpp::function<void()> Handler;
         virtual ~EventWatcher();
         bool Init();
         void Cancel();

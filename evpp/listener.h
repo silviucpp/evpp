@@ -9,7 +9,7 @@ class FdChannel;
 
 class EVPP_EXPORT Listener {
 public:
-    typedef std::function <
+    typedef evpp::function <
     void(evpp_socket_t sockfd,
          const std::string& /*remote address with format "ip:port"*/,
          const struct sockaddr_in* /*remote address*/) >

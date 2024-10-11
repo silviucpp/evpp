@@ -48,6 +48,7 @@ else (UNIX)
 endif (UNIX)
 
 if(APPLE)
+    set (CMAKE_MACOSX_RPATH 0)
     include_directories(/usr/local/include) # For Intel-based Macs
     link_directories(/usr/local/lib)
 
@@ -60,32 +61,59 @@ endif()
 
 string (REPLACE ";" " " CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS};${CXX_FLAGS}")
 
+# Eenable or disable GOOGLE_STRIP_LOG
+
+option(ENABLE_GOOGLE_STRIP_LOG "Enable GOOGLE_STRIP_LOG" ON)
+
 if (UNIX)
-    SET(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g -ggdb -D_DEBUG -DGOOGLE_STRIP_LOG=0")
-    SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -g -ggdb -DNDEBUG -DGOOGLE_STRIP_LOG=1")
+    SET(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g -ggdb -D_DEBUG")
+    SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -g -ggdb -DNDEBUG")
+
+    if(ENABLE_GOOGLE_STRIP_LOG)
+        SET(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -DGOOGLE_STRIP_LOG=1")    
+        SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DGOOGLE_STRIP_LOG=1")
+    else()
+        SET(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -DGOOGLE_STRIP_LOG=0")
+        SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DGOOGLE_STRIP_LOG=0")
+    endif()
+
     SET(DEPENDENT_LIBRARIES event glog pthread)
 else (UNIX)
     SET(DEPENDENT_LIBRARIES event glog)
 endif (UNIX)
 
-# Set to true if https support is needed.
-# Note that this needs openssl
-# SET(HTTPS True)
-if (HTTPS)
+option(ENABLE_HTTPS "Include HTTPS support (openssl required)" OFF)
+
+if (ENABLE_HTTPS)
     list(APPEND DEPENDENT_LIBRARIES ssl crypto event_openssl)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_CLIENT_SUPPORTS_SSL")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_SERVER_SUPPORTS_SSL")
-endif (HTTPS)
+endif (ENABLE_HTTPS)
 
-if (CMAKE_BENCHMARK_TESTING)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH_BENCHMARK_TESTING=1")
-endif (CMAKE_BENCHMARK_TESTING)
+option(ENABLE_BOOST_FUNCTIONS "Use boost::function instead std::function" OFF)
+
+if (ENABLE_BOOST_FUNCTIONS)
+    find_package(Boost REQUIRED)
+    
+    if (Boost_FOUND)
+        message(STATUS "Boost found: ${Boost_INCLUDE_DIRS}")
+    else()
+        message(FATAL_ERROR "Boost not found!")
+    endif()
+
+    include_directories(${Boost_INCLUDE_DIRS})
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_BOOST_FUNCTION")
+endif (ENABLE_BOOST_FUNCTIONS)
+
+if (ENABLE_HTTPS)
+    list(APPEND DEPENDENT_LIBRARIES ssl crypto event_openssl)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_CLIENT_SUPPORTS_SSL")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_SERVER_SUPPORTS_SSL")
+endif (ENABLE_HTTPS)
+
 
 set (EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set (LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-
-#set (MACOSX_RPATH ${LIBRARY_OUTPUT_PATH})
-set (CMAKE_MACOSX_RPATH 0)
 
 message (STATUS "This is BINARY dir " ${PROJECT_BINARY_DIR})
 message (STATUS "This is SOURCE dir " ${PROJECT_SOURCE_DIR})
@@ -94,6 +122,8 @@ message (STATUS "EXECUTABLE_OUTPUT_PATH " ${EXECUTABLE_OUTPUT_PATH})
 message (STATUS "LIBRARY_OUTPUT_PATH " ${LIBRARY_OUTPUT_PATH})
 
 add_subdirectory (evpp)
+
+option(EVPP_VCPKG_BUILD "Disable building examples, tests, applications, or benchmark programs." ON)
 
 if (NOT EVPP_VCPKG_BUILD)
     find_program(THRIFT_COMPILER thrift)

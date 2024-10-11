@@ -31,7 +31,7 @@ public:
         kConsumer = 1,
         kProducer = 2,
     };
-    typedef std::function<void()> CloseCallback;
+    typedef evpp::function<void()> CloseCallback;
 public:
     // Connect to the cluster of NSQDs directly
     void ConnectToNSQD(const std::string& tcp_addr/*host:port*/);
@@ -92,7 +92,7 @@ protected:
     std::vector<evpp::InvokeTimerPtr> lookupd_timers_;
     bool closing_;
 
-    typedef std::function<void(NSQConn*)> ReadyToPublishCallback;
+    typedef evpp::function<void(NSQConn*)> ReadyToPublishCallback;
     ReadyToPublishCallback ready_to_publish_fn_;
 };
 }

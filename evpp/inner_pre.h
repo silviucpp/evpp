@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 #include <iostream>
 #include <memory>
-#include <functional>
+#include "functional.h"
 #endif // end of define __cplusplus
 
 #include "platform_config.h"

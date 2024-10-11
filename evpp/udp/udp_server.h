@@ -16,7 +16,7 @@ namespace udp {
 
 class EVPP_EXPORT Server : public ThreadDispatchPolicy {
 public:
-    typedef std::function<void(EventLoop*, MessagePtr& msg)> MessageHandler;
+    typedef evpp::function<void(EventLoop*, MessagePtr& msg)> MessageHandler;
 public:
     Server();
     ~Server();

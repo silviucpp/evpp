@@ -72,12 +72,12 @@ typedef std::shared_ptr<PrefixGetResult> PrefixGetResultPtr;
 typedef std::map<std::string, PrefixGetResultPtr> PrefixMultiGetResult;
 
 
-typedef std::function<void(const std::string& key, const GetResult& result)> GetCallback;
-typedef std::function<void(const std::string& key, int code)> SetCallback;
-typedef std::function<void(const std::string& key, int code)> RemoveCallback;
-typedef std::function<void(const MultiGetResult& result)> MultiGetCallback;
-typedef std::function<void(const std::string& key, const PrefixGetResultPtr result)> PrefixGetCallback;
-typedef std::function<void(const PrefixMultiGetResult& result)> PrefixMultiGetCallback;
+typedef evpp::function<void(const std::string& key, const GetResult& result)> GetCallback;
+typedef evpp::function<void(const std::string& key, int code)> SetCallback;
+typedef evpp::function<void(const std::string& key, int code)> RemoveCallback;
+typedef evpp::function<void(const MultiGetResult& result)> MultiGetCallback;
+typedef evpp::function<void(const std::string& key, const PrefixGetResultPtr result)> PrefixGetCallback;
+typedef evpp::function<void(const PrefixMultiGetResult& result)> PrefixMultiGetCallback;
 class MemcacheClient;
 typedef std::shared_ptr<MemcacheClient> MemcacheClientPtr;
 

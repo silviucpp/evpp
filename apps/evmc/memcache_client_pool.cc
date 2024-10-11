@@ -109,7 +109,7 @@ namespace evmc {
         LaunchCommand(command);
     }
 
-    void MemcacheClientPool::RunBackGround(const std::function<void(void)>& fun) {
+    void MemcacheClientPool::RunBackGround(const evpp::function<void(void)>& fun) {
         auto loop = loop_pool_.GetNextLoopWithHash(rand());
         loop->RunInLoop(fun);
     }

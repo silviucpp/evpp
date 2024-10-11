@@ -15,7 +15,7 @@
 ```C++
 class InvokeTimer {
 public:
-    InvokeTimer(struct event_base* evloop, double timeout_ms, const std::function<void()>& f);
+    InvokeTimer(struct event_base* evloop, double timeout_ms, const evpp:function<void()>& f);
     ~InvokeTimer();
     void Start();
 };
@@ -32,7 +32,7 @@ public:
 ```C++
 #pragma once
 
-#include <functional>
+#include "evpp/functional.h"
 
 struct event;
 struct event_base;
@@ -41,7 +41,7 @@ namespace recipes {
 
 class EventWatcher {
 public:
-    typedef std::function<void()> Handler;
+    typedef evpp:function<void()> Handler;
     virtual ~EventWatcher();
     bool Init();
     void Cancel();
@@ -215,7 +215,7 @@ bool TimerEventWatcher::AsyncWait() {
 
 // 头文件
 #include <memory>
-#include <functional>
+#include "evpp/functional.h"
 
 struct event_base;
 
@@ -226,7 +226,7 @@ class InvokeTimer;
 
 class InvokeTimer {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp:function<void()> Functor;
 
     InvokeTimer(struct event_base* evloop, double timeout_ms, const Functor& f);
     ~InvokeTimer();
@@ -342,7 +342,7 @@ InvokeTimer::~InvokeTimer tid=139965845526336 this=0x7ffd2790f780
 // 头文件
 
 #include <memory>
-#include <functional>
+#include "evpp/functional.h"
 
 struct event_base;
 
@@ -353,7 +353,7 @@ class InvokeTimer;
 
 class InvokeTimer {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp:function<void()> Functor;
 
     static InvokeTimer* Create(struct event_base* evloop,
                                  double timeout_ms,
@@ -483,7 +483,7 @@ InvokeTimer::~InvokeTimer tid=139965845526336 this=0x7ffd2790f780
 // 头文件
 
 #include <memory>
-#include <functional>
+#include "evpp/functional.h"
 
 struct event_base;
 
@@ -496,7 +496,7 @@ typedef std::shared_ptr<InvokeTimer> InvokeTimerPtr;
 
 class InvokeTimer : public std::enable_shared_from_this<InvokeTimer> {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp:function<void()> Functor;
 
     static InvokeTimerPtr Create(struct event_base* evloop,
                                  double timeout_ms,

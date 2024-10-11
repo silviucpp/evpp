@@ -4,9 +4,9 @@
 #include <string>
 #include <algorithm>
 #include <cctype>
-#include <functional>
 #include <iterator>
 
+#include "evpp/functional.h"
 #include "evpp/inner_pre.h"
 
 namespace evpp {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <functional>
+#include "evpp/functional.h"
 
 struct event_base;
 
@@ -12,7 +12,7 @@ class InvokeTimer;
 
 class InvokeTimer {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp::function<void()> Functor;
 
     InvokeTimer(struct event_base* evloop, double timeout_ms, const Functor& f);
     ~InvokeTimer();

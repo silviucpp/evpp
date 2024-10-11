@@ -12,7 +12,7 @@ typedef std::shared_ptr<InvokeTimer> InvokeTimerPtr;
 
 class EVPP_EXPORT InvokeTimer : public std::enable_shared_from_this<InvokeTimer> {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp::function<void()> Functor;
 
     // @brief Create a timer. When the timer is timeout, the functor f will
     //  be invoked automatically.

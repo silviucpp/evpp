@@ -11,8 +11,8 @@ class EVNSQ_EXPORT Producer : public Client {
 public:
     // When the connection to NSQD is ready, this callback will be called.
     // After this callback, the application can publish message.
-    typedef std::function<void()> ReadyCallback;
-    typedef std::function<void(Producer*, size_t)> HighWaterMarkCallback;
+    typedef evpp::function<void()> ReadyCallback;
+    typedef evpp::function<void(Producer*, size_t)> HighWaterMarkCallback;
 
     Producer(evpp::EventLoop* loop, const Option& ops);
     ~Producer();

@@ -2,7 +2,8 @@
 #include <string>
 #include <algorithm>
 #include <cctype>
-#include <functional>
+
+#include "evpp/functional.h"
 #include "evpp/httpc/url_parser.h"
 
 namespace evpp {

@@ -5,7 +5,7 @@
 
 class LengthHeaderCodec {
 public:
-    typedef std::function<void(const evpp::TCPConnPtr&,
+    typedef evpp::function<void(const evpp::TCPConnPtr&,
                                const std::string& message)> StringMessageCallback;
 
     explicit LengthHeaderCodec(const StringMessageCallback& cb)

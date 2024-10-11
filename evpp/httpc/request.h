@@ -13,7 +13,7 @@ namespace httpc {
 class ConnPool;
 class Response;
 class Conn;
-typedef std::function<void(const std::shared_ptr<Response>&)> Handler;
+typedef evpp::function<void(const std::shared_ptr<Response>&)> Handler;
 
 class EVPP_EXPORT Request {
 public:

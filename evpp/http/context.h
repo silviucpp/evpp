@@ -107,9 +107,9 @@ private:
 
 typedef std::shared_ptr<Context> ContextPtr;
 
-typedef std::function<void(const std::string& response_data)> HTTPSendResponseCallback;
+typedef evpp::function<void(const std::string& response_data)> HTTPSendResponseCallback;
 
-typedef std::function <
+typedef evpp::function <
 void(EventLoop* loop,
      const ContextPtr& ctx,
      const HTTPSendResponseCallback& respcb) > HTTPRequestCallback;

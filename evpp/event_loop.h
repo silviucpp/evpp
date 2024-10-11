@@ -35,7 +35,7 @@ namespace evpp {
 // One thread one loop.
 class EVPP_EXPORT EventLoop : public ServerStatus {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp::function<void()> Functor;
 public:
     EventLoop();
 

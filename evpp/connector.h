@@ -13,7 +13,7 @@ class DNSResolver;
 class TCPClient;
 class EVPP_EXPORT Connector : public std::enable_shared_from_this<Connector> {
 public:
-    typedef std::function<void(evpp_socket_t sockfd, const std::string& /*local addr*/)> NewConnectionCallback;
+    typedef evpp::function<void(evpp_socket_t sockfd, const std::string& /*local addr*/)> NewConnectionCallback;
     Connector(EventLoop* loop, TCPClient* client);
     ~Connector();
     void Start();

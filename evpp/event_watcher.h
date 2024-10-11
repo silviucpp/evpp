@@ -11,7 +11,7 @@ namespace evpp {
 class EventLoop;
 class EVPP_EXPORT EventWatcher {
 public:
-    typedef std::function<void()> Handler;
+    typedef evpp::function<void()> Handler;
 
     virtual ~EventWatcher();
 

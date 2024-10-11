@@ -48,7 +48,7 @@ class Listener;
 //
 class EVPP_EXPORT TCPServer : public ThreadDispatchPolicy, public ServerStatus {
 public:
-    typedef std::function<void()> DoneCallback;
+    typedef evpp::function<void()> DoneCallback;
 
     // @brief The constructor of a TCPServer.
     // @param loop -

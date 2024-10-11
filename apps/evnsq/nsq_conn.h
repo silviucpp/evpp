@@ -42,8 +42,8 @@ public:
         kDisconnecting = 7,
     };
 
-    typedef std::function<void(const std::shared_ptr<NSQConn>& conn)> ConnectionCallback;
-    typedef std::function<void(const CommandPtr& cmd, bool successfull)> PublishResponseCallback;
+    typedef evpp::function<void(const std::shared_ptr<NSQConn>& conn)> ConnectionCallback;
+    typedef evpp::function<void(const CommandPtr& cmd, bool successfull)> PublishResponseCallback;
 public:
     NSQConn(Client* c, const Option& ops);
     ~NSQConn();

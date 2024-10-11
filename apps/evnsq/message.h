@@ -49,5 +49,5 @@ struct Message {
 // When the return value is 0 Consumer will automatically handle FINishing.
 //
 // When the returned value is non-zero Consumer will automatically handle REQueing.
-typedef std::function<int(const Message*)> MessageCallback;
+typedef evpp::function<int(const Message*)> MessageCallback;
 }

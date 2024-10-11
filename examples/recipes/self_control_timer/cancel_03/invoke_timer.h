@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <functional>
+#include "evpp/functional.h"
 
 struct event_base;
 
@@ -14,7 +14,7 @@ typedef std::shared_ptr<InvokeTimer> InvokeTimerPtr;
 
 class InvokeTimer : public std::enable_shared_from_this<InvokeTimer> {
 public:
-    typedef std::function<void()> Functor;
+    typedef evpp::function<void()> Functor;
 
     static InvokeTimerPtr Create(struct event_base* evloop,
                                  double timeout_ms,

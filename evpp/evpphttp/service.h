@@ -6,8 +6,8 @@
 #include "evpp/evpphttp/http_response.h"
 namespace evpp {
 namespace evpphttp {
-typedef std::function<void(const int response_code, const std::map<std::string, std::string>& response_field_value, const std::string& response_data)> HTTPSendResponseCallback;
-typedef std::function <void(EventLoop* loop, HttpRequest& ctx, const HTTPSendResponseCallback& respcb)> HTTPRequestCallback;
+typedef evpp::function<void(const int response_code, const std::map<std::string, std::string>& response_field_value, const std::string& response_data)> HTTPSendResponseCallback;
+typedef evpp::function <void(EventLoop* loop, HttpRequest& ctx, const HTTPSendResponseCallback& respcb)> HTTPRequestCallback;
 class EVPP_EXPORT Service {
 private:
     typedef std::map<std::string/*The uri*/, HTTPRequestCallback> HTTPRequestCallbackMap;
