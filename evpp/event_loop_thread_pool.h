@@ -29,8 +29,9 @@ public:
     EventLoop* GetBaseLoop() {return base_loop_;}
     EventLoop* GetNextLoop();
     EventLoop* GetNextLoopWithHash(uint64_t hash);
+    EventLoop* GetLoop(size_t index);
 
-    uint32_t thread_num() const;
+    uint32_t thread_num() const {return thread_num_;}
 
 private:
     void Stop(bool wait_thread_exit, DoneCallback fn);

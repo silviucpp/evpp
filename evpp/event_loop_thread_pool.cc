@@ -160,8 +160,12 @@ EventLoop* EventLoopThreadPool::GetNextLoopWithHash(uint64_t hash) {
     return loop;
 }
 
-uint32_t EventLoopThreadPool::thread_num() const {
-    return thread_num_;
+EventLoop* EventLoopThreadPool::GetLoop(size_t index)
+{
+    if(index <  threads_.size())
+        return (threads_[index])->loop();
+
+    return nullptr;
 }
 
 void EventLoopThreadPool::OnThreadStarted(uint32_t count) {
