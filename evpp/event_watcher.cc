@@ -161,9 +161,7 @@ void PipeEventWatcher::HandlerFn(evpp_socket_t fd, short /*which*/, void* v) {
 #else
     char buf[128];
 #endif
-    int n = 0;
-
-    if ((n = ::recv(e->pipe_[1], buf, sizeof(buf), 0)) > 0) {
+    if (::recv(e->pipe_[1], buf, sizeof(buf), 0) > 0) {
         e->handler_();
     }
 }

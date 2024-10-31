@@ -139,8 +139,7 @@ void PipeEventWatcher::DoClose() {
 void PipeEventWatcher::HandlerFn(evutil_socket_t /*fd*/, short /*which*/, void* v) {
     PipeEventWatcher* e = (PipeEventWatcher*)v;
     char buf[128];
-    int n = 0;
-    if ((n = ::recv(e->pipe_[1], buf, sizeof(buf), 0)) > 0) {
+    if (::recv(e->pipe_[1], buf, sizeof(buf), 0) > 0) {
         e->handler_();
     }
 }
