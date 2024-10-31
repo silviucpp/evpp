@@ -6,18 +6,29 @@
 #include "evpp/libevent.h"
 
 namespace evpp {
-TCPServer::TCPServer(EventLoop* loop,
-                     const std::string& laddr,
-                     const std::string& name,
-                     uint32_t thread_num)
-    : loop_(loop)
-    , listen_addr_(laddr)
-    , name_(name)
-    , conn_fn_(&internal::DefaultConnectionCallback)
-    , msg_fn_(&internal::DefaultMessageCallback)
-    , next_conn_id_(0) {
-    DLOG_TRACE << "name=" << name << " listening addr " << laddr << " thread_num=" << thread_num;
-    tpool_.reset(new EventLoopThreadPool(loop_, thread_num));
+TCPServer::TCPServer(EventLoop* loop, const std::string& laddr, const std::string& name, uint32_t thread_num): 
+    TCPServer(std::make_shared<EventLoopThreadPool>(loop, thread_num), laddr, name, true) 
+{
+
+}
+
+TCPServer::TCPServer(const std::shared_ptr<EventLoopThreadPool>& pool, const std::string& laddr, const std::string& name):
+    TCPServer(pool, laddr, name, false)
+{
+
+}
+
+TCPServer::TCPServer(const std::shared_ptr<EventLoopThreadPool>& pool, const std::string& laddr, const std::string& name, bool own_th_pool) :
+    loop_(pool->GetBaseLoop()),
+    listen_addr_(laddr),
+    name_(name),
+    tpool_(pool),
+    own_th_pool_(own_th_pool), 
+    conn_fn_(&internal::DefaultConnectionCallback),
+    msg_fn_(&internal::DefaultMessageCallback),
+    next_conn_id_(0)
+{
+    DLOG_TRACE << "name=" << name << " listening addr " << laddr << " thread_num=" << tpool_->thread_num();
 }
 
 TCPServer::~TCPServer() {
@@ -25,7 +36,10 @@ TCPServer::~TCPServer() {
     assert(connections_.empty());
     assert(!listener_);
     if (tpool_) {
-        assert(tpool_->IsStopped());
+#if defined(_DEBUG)
+        if(own_th_pool_)
+            assert(tpool_->IsStopped());
+#endif
         tpool_.reset();
     }
 }
@@ -40,7 +54,8 @@ bool TCPServer::Init() {
 }
 
 void TCPServer::AfterFork() {
-    tpool_->AfterFork();
+    if(own_th_pool_)
+        tpool_->AfterFork();
 }
 
 bool TCPServer::Start() {
@@ -48,7 +63,8 @@ bool TCPServer::Start() {
     assert(status_ == kInitialized);
     status_.store(kStarting);
     assert(listener_.get());
-    bool rc = tpool_->Start(true);
+
+    bool rc = own_th_pool_ ? tpool_->Start(true) : true;
     if (rc) {
         assert(tpool_->IsRunning());
         listener_->SetNewConnectionCallback(
@@ -114,16 +130,21 @@ void TCPServer::StopInLoop(DoneCallback on_stopped_cb) {
 }
 
 void TCPServer::StopThreadPool() {
-    DLOG_TRACE << "pool=" << tpool_.get();
-    assert(loop_->IsInLoopThread());
-    assert(IsStopping());
-    substatus_.store(kStoppingThreadPool);
-    tpool_->Stop(true);
-    assert(tpool_->IsStopped());
 
-    // Make sure all the working threads totally stopped.
-    tpool_->Join();
-    tpool_.reset();
+    if(own_th_pool_)
+    {
+        DLOG_TRACE << "stop thread pool:"<< tpool_.get();
+        assert(loop_->IsInLoopThread());
+        assert(IsStopping());
+        substatus_.store(kStoppingThreadPool);
+
+        tpool_->Stop(true);
+        assert(tpool_->IsStopped());
+
+        // Make sure all the working threads totally stopped.
+        tpool_->Join();
+        tpool_.reset();
+    }
 
     substatus_.store(kSubStatusNull);
 }
@@ -172,8 +193,7 @@ void TCPServer::RemoveConnection(const TCPConnPtr& conn) {
         assert(this->loop_->IsInLoopThread());
         this->connections_.erase(conn->id());
         if (IsStopping() && this->connections_.empty()) {
-            // At last, we stop all the working threads
-            DLOG_TRACE << "stop thread pool";
+            // At last, we stop all the working threads if we own the pool.
             assert(substatus_.load() == kStoppingListener);
             StopThreadPool();
             if (stopped_cb_) {

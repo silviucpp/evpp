@@ -59,6 +59,16 @@ public:
               const std::string& listen_addr/*ip:port*/,
               const std::string& name,
               uint32_t thread_num);
+
+    // @brief The constructor of a TCPServer.
+    // @param pool - The thread pool
+    // @param listen_addr - The listening address with "ip:port" format
+    // @param name - The name of this object
+
+    TCPServer(const std::shared_ptr<EventLoopThreadPool>& pool,
+              const std::string& listen_addr/*ip:port*/,
+              const std::string& name);
+
     ~TCPServer();
 
     // @brief Do the initialization works here.
@@ -99,6 +109,8 @@ public:
         return listen_addr_;
     }
 private:
+    TCPServer(const std::shared_ptr<EventLoopThreadPool>& pool, const std::string& listen_addr, const std::string& name, bool own_th_pool);
+
     void StopThreadPool();
     void StopInLoop(DoneCallback on_stopped_cb);
     void RemoveConnection(const TCPConnPtr& conn);
@@ -110,6 +122,7 @@ private:
     const std::string name_;
     std::unique_ptr<Listener> listener_;
     std::shared_ptr<EventLoopThreadPool> tpool_;
+    bool own_th_pool_;
     ConnectionCallback conn_fn_;
     MessageCallback msg_fn_;
 

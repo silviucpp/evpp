@@ -26,6 +26,7 @@ public:
     // @brief Reinitialize some data fields after a fork
     void AfterFork();
 public:
+    EventLoop* GetBaseLoop() {return base_loop_;}
     EventLoop* GetNextLoop();
     EventLoop* GetNextLoopWithHash(uint64_t hash);
 
