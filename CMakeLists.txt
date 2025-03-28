@@ -22,6 +22,8 @@ if(UNIX)
     set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
 
     option(ENABLE_GOOGLE_STRIP_LOG "Enable GOOGLE_STRIP_LOG" ON)
+    option(LOG_TO_SINK_ONLY "Log to sink only" OFF)
+
     if(ENABLE_GOOGLE_STRIP_LOG)
         foreach(FLAG CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL)
             set(${FLAG} "${${FLAG}} -DGOOGLE_STRIP_LOG=1")
@@ -31,7 +33,11 @@ if(UNIX)
             set(${FLAG} "${${FLAG}} -DGOOGLE_STRIP_LOG=0")
         endforeach()
     endif()
-    
+
+    if(LOG_TO_SINK_ONLY)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_LOG_TO_SINK_ONLY")
+    endif()
+
     include_directories (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/3rdparty)
     set(DEPENDENT_LIBRARIES event glog pthread)
 elseif(WIN32)
