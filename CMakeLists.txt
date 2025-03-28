@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(safe-evpp C CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build.")
 endif()
 
 if(UNIX)
@@ -35,7 +35,7 @@ if(UNIX)
     endif()
 
     if(LOG_TO_SINK_ONLY)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_LOG_TO_SINK_ONLY")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_LOG_TO_SINK_ONLY")
     endif()
 
     include_directories (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/3rdparty)
@@ -72,9 +72,9 @@ option(ENABLE_HTTPS "Include HTTPS support (openssl required)" OFF)
 
 if(ENABLE_HTTPS)
     list(APPEND DEPENDENT_LIBRARIES ssl crypto event_openssl)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_CLIENT_SUPPORTS_SSL")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_SERVER_SUPPORTS_SSL")
-endif(ENABLE_HTTPS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_CLIENT_SUPPORTS_SSL")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DEVPP_HTTP_SERVER_SUPPORTS_SSL")
+endif()
 
 option(ENABLE_BOOST_FUNCTIONS "Use boost::function instead std::function" OFF)
 
@@ -88,17 +88,17 @@ if(ENABLE_BOOST_FUNCTIONS)
     endif()
 
     include_directories(${Boost_INCLUDE_DIRS})
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_BOOST_FUNCTION")
-endif(ENABLE_BOOST_FUNCTIONS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_BOOST_FUNCTION")
+endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-message(STATUS "This is BINARY dir " ${PROJECT_BINARY_DIR})
-message(STATUS "This is SOURCE dir " ${PROJECT_SOURCE_DIR})
-message(STATUS "CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS})
-message(STATUS "EXECUTABLE_OUTPUT_PATH " ${EXECUTABLE_OUTPUT_PATH})
-message(STATUS "LIBRARY_OUTPUT_PATH " ${LIBRARY_OUTPUT_PATH})
+message(STATUS "This is BINARY dir ${PROJECT_BINARY_DIR}")
+message(STATUS "This is SOURCE dir ${PROJECT_SOURCE_DIR}")
+message(STATUS "CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}")
+message(STATUS "EXECUTABLE_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH}")
+message(STATUS "LIBRARY_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}")
 
 add_subdirectory(evpp)
 
@@ -109,9 +109,9 @@ if(NOT EVPP_VCPKG_BUILD)
     find_path(THRIFT_INCLUDE_DIR thrift)
     find_library(THRIFT_LIBRARY NAMES thrift)
 
-    message(STATUS "THRIFT_COMPILER " ${THRIFT_COMPILER})
-    message(STATUS "THRIFT_INCLUDE_DIR " ${THRIFT_INCLUDE_DIR})
-    message(STATUS "THRIFT_LIBRARY " ${THRIFT_LIBRARY})
+    message(STATUS "THRIFT_COMPILER ${THRIFT_COMPILER}")
+    message(STATUS "THRIFT_INCLUDE_DIR ${THRIFT_INCLUDE_DIR}")
+    message(STATUS "THRIFT_LIBRARY ${THRIFT_LIBRARY}")
 
     add_subdirectory(apps)
     add_subdirectory(labs)
