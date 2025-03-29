@@ -17,36 +17,36 @@ namespace evpp {
     google::LogSink* sink();
 }
 
-#define GLOG_INFO LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), INFO)
-#define GLOG_WARNING  LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), WARNING)
-#define GLOG_ERROR LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), ERROR)
-#define GLOG_FATAL LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), FATAL)
+#define MSG_INFO LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), INFO)
+#define MSG_WARNING  LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), WARNING)
+#define MSG_ERROR LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), ERROR)
+#define MSG_FATAL LOG_TO_SINK_BUT_NOT_TO_LOGFILE(evpp::sink(), FATAL)
 
 #else
 
-#define GLOG_INFO LOG(INFO)
-#define GLOG_WARNING LOG(WARNING)
-#define GLOG_ERROR LOG(ERROR)
-#define GLOG_FATAL LOG(FATAL)
+#define MSG_INFO LOG(INFO)
+#define MSG_WARNING LOG(WARNING)
+#define MSG_ERROR LOG(ERROR)
+#define MSG_FATAL LOG(FATAL)
 
 #endif
 
 #if GOOGLE_STRIP_LOG == 0
-#define LOG_TRACE GLOG_INFO
-#define LOG_DEBUG GLOG_INFO
-#define LOG_INFO  GLOG_INFO
-#define DLOG_TRACE GLOG_INFO << __PRETTY_FUNCTION__ << " this=" << this << " "
+#define LOG_TRACE MSG_INFO
+#define LOG_DEBUG MSG_INFO
+#define LOG_INFO  MSG_INFO
+#define DLOG_TRACE MSG_INFO << __PRETTY_FUNCTION__ << " this=" << this << " "
 #else
-#define LOG_TRACE if (false) GLOG_INFO
-#define LOG_DEBUG if (false) GLOG_INFO
-#define LOG_INFO  if (false) GLOG_INFO
-#define DLOG_TRACE if (false) GLOG_INFO
+#define LOG_TRACE if (false) MSG_INFO
+#define LOG_DEBUG if (false) MSG_INFO
+#define LOG_INFO  if (false) MSG_INFO
+#define DLOG_TRACE if (false) MSG_INFO
 #endif
 
-#define DLOG_WARN GLOG_WARNING << __PRETTY_FUNCTION__ << " this=" << this << " "
-#define LOG_WARN  GLOG_WARNING
-#define LOG_ERROR GLOG_ERROR
-#define LOG_FATAL GLOG_FATAL
+#define DLOG_WARN MSG_WARNING << __PRETTY_FUNCTION__ << " this=" << this << " "
+#define LOG_WARN  MSG_WARNING
+#define LOG_ERROR MSG_ERROR
+#define LOG_FATAL MSG_FATAL
 
 #else
 #define LOG_TRACE std::cout << __FILE__ << ":" << __LINE__ << " "
