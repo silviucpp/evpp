@@ -35,7 +35,9 @@ if(UNIX)
     endif()
 
     if(LOG_TO_SINK_ONLY)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_LOG_TO_SINK_ONLY")
+        foreach(FLAG CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL)
+            set(${FLAG} "${${FLAG}} -DGOOGLE_LOG_TO_SINK_ONLY")
+        endforeach()
     endif()
 
     include_directories (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/3rdparty)
