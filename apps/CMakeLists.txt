@@ -9,15 +9,8 @@ include_directories(
 )
 
 # Set libraries based on the platform
-if (UNIX)
-    set(LIBRARIES evpp_concurrentqueue event glog pthread)
-else()
-    set(LIBRARIES evpp_static event glog)
-    link_directories(
-        ${PROJECT_SOURCE_DIR}/vsprojects/bin/${CMAKE_BUILD_TYPE}/
-        ${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/
-    )
-endif()
+
+set(LIBRARIES evpp_concurrentqueue event glog pthread)
 
 # Add subdirectories for additional components
 add_subdirectory(evnsq)
