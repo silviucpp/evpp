@@ -6,49 +6,37 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build.")
 endif()
 
-if(UNIX)
-    set(CXX_FLAGS
-        -g -fPIC -Wall -Wextra -D__STDC_FORMAT_MACROS
-        -Wno-unused-parameter -Wno-unused-function
-        -Wunused-variable -Wunused-value -Wshadow -Wcast-qual
-        -Wwrite-strings -Wsign-compare -Winvalid-pch
-        -fms-extensions -Wno-implicit-fallthrough -Wfloat-equal
-        -std=c++17
-    )
+set(CXX_FLAGS
+    -g -fPIC -Wall -Wextra -D__STDC_FORMAT_MACROS
+    -Wno-unused-parameter -Wno-unused-function
+    -Wunused-variable -Wunused-value -Wshadow -Wcast-qual
+    -Wwrite-strings -Wsign-compare -Winvalid-pch
+    -fms-extensions -Wno-implicit-fallthrough -Wfloat-equal
+    -std=c++17
+)
 
-    set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -ggdb -D_DEBUG")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g -ggdb -DNDEBUG")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -ggdb -D_DEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g -ggdb -DNDEBUG")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
 
-    option(ENABLE_GOOGLE_STRIP_LOG "Enable GOOGLE_STRIP_LOG" ON)
-    option(LOG_TO_SINK_ONLY "Log to sink only" OFF)
+option(ENABLE_GOOGLE_STRIP_LOG "Enable GOOGLE_STRIP_LOG" ON)
+option(LOG_TO_SINK_ONLY "Log to sink only" OFF)
 
-    if(ENABLE_GOOGLE_STRIP_LOG)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_STRIP_LOG=1")
-    else()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_STRIP_LOG=0")
-    endif()
-
-    if(LOG_TO_SINK_ONLY)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_LOG_TO_SINK_ONLY=1")
-    endif()
-
-    include_directories (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/3rdparty)
-    set(DEPENDENT_LIBRARIES event glog pthread)
-elseif(WIN32)
-    set(CXX_FLAGS -DWIN32 -D_WIN32 -EHsc)
-    set(VcpkgRoot ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
-    include_directories(${VcpkgRoot}/include ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/3rdparty/wininclude)
-
-    # Link directories based on build mode
-    link_directories(
-        $<$<CONFIG:Debug>:${VcpkgRoot}/debug/lib;${VcpkgRoot}/debug/lib/manual-link>
-        $<$<CONFIG:Release>:${VcpkgRoot}/lib;${VcpkgRoot}/lib/manual-link>
-    )
-
-    set(DEPENDENT_LIBRARIES event glog)
+if(ENABLE_GOOGLE_STRIP_LOG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_STRIP_LOG=1")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_STRIP_LOG=0")
 endif()
+
+if(LOG_TO_SINK_ONLY)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGOOGLE_LOG_TO_SINK_ONLY=1")
+endif()
+
+include_directories (${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/3rdparty)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLOG_USE_GLOG_EXPORT")
+set(DEPENDENT_LIBRARIES event glog pthread)
+
 
 if(APPLE)
     set(CMAKE_MACOSX_RPATH 0)
