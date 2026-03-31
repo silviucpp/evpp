@@ -9,7 +9,7 @@
 namespace evpp {
 namespace httpc {
 using namespace std;
-static const std::string default_http_port = "80";
+
 static bool equal_key(char v) {
     return v == ':' || v == '/' || v == '?' || v == '#';
 }
